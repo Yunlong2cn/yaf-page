@@ -1,0 +1,19 @@
+{
+    "name": "leray/yaf-page",
+    "description": "page for yaf",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yunlong2cn",
+            "email": "384345134@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Leray\\Yaf\\": "src/"
+        },
+        "classmap": ["src/"]
+    }
+}

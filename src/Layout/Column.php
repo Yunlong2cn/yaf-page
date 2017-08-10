@@ -6,18 +6,22 @@ use Yaf\View\Simple;
 
 class Column
 {
-	private $view;
+	private $width;
 	private $content;
 
-	public function __construct($content = null, View_Interface $view = null)
-	{
-		$this->view = $view ?: new Simple(__DIR__ . '/../../views');
+	private $style;
 
-		$this->view->content = $content;
+	public function __construct($content = null, $width = 12, $styles = [])
+	{
+		$this->content = $content;
+
+		array_unshift($styles, "col-xs-$width");
+
+		$this->style = implode(' ', $styles);
 	}
 
 	public function __toString()
 	{
-		return $this->view->render('column.phtml');
+		return "<div class='{$this->style}'>{$this->content}</div>";
 	}
 }

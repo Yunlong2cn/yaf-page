@@ -4,24 +4,25 @@ namespace Leray\Yaf\Page\Layout;
 use Yaf\View_Interface ;
 use Yaf\View\Simple;
 
+use Closure;
+
 class Row
 {
-	private $view;
 	private $content;
 
-	private $columns;
+	private $columns = [];
 
-	public function __construct($content = null, View_Interface $view = null)
+	public function __construct($content = null)
 	{
-		$this->view = $view ?: new Simple(__DIR__ . '/../../views');
-
-		$this->content = $content;
+		$content && $this->column(12, $content);
 	}
 
 
-	public function column($with, $content)
+	public function column($width, $content, $styles = [])
 	{
-		$column = new Column($content, $width);
+		$column = new Column($content, $width, $styles);
+
+		$callable instanceof Closure && call_user_func($callable, $column);
 		
 		$this->addColumn($column);
 
@@ -37,8 +38,9 @@ class Row
 
 	public function __toString()
 	{
-		$this->view->content = $this->content;
-
-		return $this->view->render('row.phtml');
+		array_walk($this->columns, function($column) {
+			$this->content .= $column;
+		});
+		return '<div class="row">'. $this->content .'</div>';
 	}
 }

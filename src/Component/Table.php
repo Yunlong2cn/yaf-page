@@ -27,13 +27,13 @@ class Table implements IComponent
 	{
 		$this->view = $view ?: new Simple(__DIR__ . '/../../views');
 
-		$this->view->notfound = '暂无数据';
+		$this->view->notfound = '暂无数据...';
+
+		$callback instanceof Closure && call_user_func($callback, $this);
 	}
 
 	public function push($data = [])
 	{
-		array_push($this->data, $data);
-
 		return $this;
 	}
 

@@ -1,4 +1,16 @@
-card.phtml
 <?php foreach($cards as $card):?>
-	-<?php echo $card['name'];?>-
+	<div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+    <div class="small-box bg-aqua">
+      <div class="inner">
+        <h3><?php echo $card['number']?></h3>
+
+        <p><?php echo $card['name']?></p>
+      </div>
+      <div class="icon">
+        <i class="ion ion-bag"></i>
+      </div>
+      <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
 <?php endforeach;?>

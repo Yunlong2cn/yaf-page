@@ -7,15 +7,38 @@ use Yaf\View\Simple;
 class Row
 {
 	private $view;
+	private $content;
 
-	public function __construct(Closure $callback, View_Interface $view = null)
+	private $columns;
+
+	public function __construct($content = null, View_Interface $view = null)
 	{
 		$this->view = $view ?: new Simple(__DIR__ . '/../../views');
+
+		$this->content = $content;
 	}
 
-	public function __destruct()
+
+	public function column($with, $content)
 	{
-		$this->view->content = 'sdfa';
-		$this->view->render('row.phtml');
+		$column = new Column($content, $width);
+		
+		$this->addColumn($column);
+
+		return $this;
+	}
+
+	public function addColumn(Column $column)
+	{
+		$this->columns[] = $column;
+
+		return $this;
+	}
+
+	public function __toString()
+	{
+		$this->view->content = $this->content;
+
+		return $this->view->render('row.phtml');
 	}
 }

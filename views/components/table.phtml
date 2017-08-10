@@ -1,0 +1,48 @@
+<div class="box">
+	<?php if($title):?>
+		<div class="box-header">
+			<h3 class="box-title"><?php echo $title?></h3>
+		</div>
+	<?php endif;?>
+	<!-- /.box-header -->
+	<div class="box-body">
+		<table id="example2" class="table table-bordered table-hover">
+			<?php if($headers):?>
+				<thead>
+					<tr>
+						<?php foreach($headers as $header):?>
+							<th><?php echo $header;?></th>
+						<?php endforeach;?>
+					</tr>
+				</thead>
+			<?php endif;?>
+			<tbody>
+				<?php if($data):?>
+					<?php foreach($data as $key => $val):?>
+						<tr>
+							<?php foreach($headers as $k => $header):?>
+								<td><?php echo $val[$k]?></td>
+							<?php endforeach;?>
+						</tr>
+					<?php endforeach;?>
+				<?php else:?>
+					<tr>
+					<td colspan="<?php echo $columnNumber?>"><?php echo $notfound?></td>
+					</tr>
+				<?php endif;?>
+			</tbody>
+			<?php if($footer):?>
+				<tfoot>
+					<tr>
+						<th>Rendering engine</th>
+						<th>Browser</th>
+						<th>Platform(s)</th>
+						<th>Engine version</th>
+						<th>CSS grade</th>
+					</tr>
+				</tfoot>
+			<?php endif;?>
+		</table>
+	</div>
+	<!-- /.box-body -->
+</div>

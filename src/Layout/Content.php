@@ -3,12 +3,15 @@ namespace Leray\Yaf\Page\Layout;
 
 use Closure;
 
-use Yaf\View_Interface ;
+use Yaf\View_Interface;
 use Yaf\View\Simple;
+
+use Leray\Yaf\Page\Component\IComponent;
 
 class Content
 {
 	private $view;
+	private $rows = [];
 
 	public function __construct(Closure $callback = null, View_Interface $view = null)
 	{
@@ -28,9 +31,12 @@ class Content
 	public function __destruct()
 	{
 
+		$content = $this->build();
+
 		$this->view->assign([
 			'header' => $this->header,
-			'description' => $this->description
+			'description' => $this->description,
+			'content' => $content
 		]);
 
 		$content = $this->view->render('content.phtml');
@@ -63,8 +69,29 @@ class Content
 		return $this;
 	}
 
-	public function row(Closure $callback)
+	public function row($content)
 	{
+
+		if($content instanceof Closure) {
+			$row = call_user_func($content, new Row);
+		} else {
+			$row = new Row($content);
+		}
+
+		$this->rows[] = $row;
+
 		return $this;
+	}
+	
+	public function build()
+	{
+		ob_start();
+        foreach ($this->rows as $row) {
+            echo $row;
+        }
+        $content = ob_get_contents();
+        ob_end_clean();
+
+		return $content;
 	}
 }

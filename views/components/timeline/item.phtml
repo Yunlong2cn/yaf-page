@@ -1,0 +1,18 @@
+<li>
+	<i class="fa fa-envelope bg-blue"></i>
+	<div class="timeline-item">
+		<span class="time"><i class="fa fa-clock-o"></i> <?php echo $time?></span>
+
+		<?php if($title):?>
+			<h3 class="timeline-header"><a href="#"><?php echo $title?></a> <?php echo $subTitle?></h3>
+		<?php endif;?>
+
+		<div class="timeline-body"><?php echo $content?></div>
+
+		<?php if($footer):?>
+			<div class="timeline-footer">
+				<?php echo $footer?>
+			</div>
+		<?php endif;?>
+	</div>
+</li>

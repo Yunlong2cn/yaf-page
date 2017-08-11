@@ -13,60 +13,20 @@ class Content
 	private $view;
 	private $rows = [];
 
-	public function __construct(Closure $callback = null, View_Interface $view = null)
+	private $vars = [];
+
+	private $content;// 内容
+
+	public function __construct(Closure $callback = null)
 	{
 		if ($callback instanceof Closure) {
             $callback($this);
         }
-
-        $this->view = $view ?: new Simple(__DIR__ . '/../../views');
-
 	}
 
 	public function __set($key, $value)
 	{
 		$this->$key = $value;
-	}
-
-	public function __destruct()
-	{
-
-		$content = $this->build();
-
-		$this->view->assign([
-			'header' => $this->header,
-			'description' => $this->description,
-			'content' => $content
-		]);
-
-		$content = $this->view->render('content.phtml');
-		$this->view->content = $content;
-		$this->view->assign([
-			'title' => $this->title
-		]);
-
-		return $this->view->display('index.phtml');
-	}
-
-	public function header($header = '')
-	{
-		$this->header = $header;
-
-		return $this;
-	}
-
-	public function description($description = '')
-	{
-		$this->description = $description;
-
-		return $this;
-	}
-
-	public function title($title = '')
-	{
-		$this->title = $title;
-
-		return $this;
 	}
 
 	public function row($content)
@@ -82,16 +42,26 @@ class Content
 
 		return $this;
 	}
-	
-	public function build()
-	{
-		ob_start();
-        foreach ($this->rows as $row) {
-            echo $row;
-        }
-        $content = ob_get_contents();
-        ob_end_clean();
 
-		return $content;
+	public function __call($method, $args)
+	{
+		$this->vars[$method] = $args[0];
+
+		return $this;
+	}
+
+	public function __toString()
+	{
+		$view = new Simple(__DIR__ . '/../../views');
+
+		$view->assign($this->vars);
+
+		array_walk_recursive($this->rows, function($row) {
+			$this->content .= $row;
+		});
+
+		$view->content = $this->content;
+
+		return $view->render('content.phtml');
 	}
 }

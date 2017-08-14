@@ -17,6 +17,8 @@ class Content
 
 	private $content;// 内容
 
+	private $response;
+
 	public function __construct(Closure $callback = null)
 	{
 		if ($callback instanceof Closure) {
@@ -43,6 +45,13 @@ class Content
 		return $this;
 	}
 
+	public function setResponse($response)
+	{
+		$this->response = $response;
+
+		return $this;
+	}
+
 	public function __call($method, $args)
 	{
 		$this->vars[$method] = $args[0];
@@ -62,6 +71,12 @@ class Content
 
 		$view->content = $this->content;
 
-		return $view->render('content.phtml');
+		$out = $view->render('content.phtml');
+
+		if($this->response) {
+			return $this->response->setBody($out);
+		}
+
+		return $out;
 	}
 }

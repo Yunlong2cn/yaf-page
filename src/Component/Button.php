@@ -55,8 +55,21 @@ class Button implements IComponent
 		return $this;
 	}
 
+	public function link($link)
+	{
+		$this->link = $link;
+
+		return $this;
+	}
+
 	public function __toString()
 	{
-		return '<button type="button" class="'. implode(' ', $this->styles) .'">'. $this->body .'</button>';
+		$class = implode(' ', $this->styles);
+
+		if($this->link) {
+			return '<a href="'. $this->link .'" class="'. $class .'">'. $this->body .'</a>';
+		} else {
+			return '<button type="button" class="'. $class .'">'. $this->body .'</button>';
+		}
 	}
 }

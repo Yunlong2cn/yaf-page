@@ -52,6 +52,20 @@ class Content
 		return $this;
 	}
 
+	public function form($formId = null)
+	{
+		$this->formId = $formId ? $formId : time();
+
+		return $this;
+	}
+
+	public function bind($class, $data = null)
+	{
+		$class::$data = $data;
+
+		return $this;
+	}
+
 	public function __call($method, $args)
 	{
 		$this->vars[$method] = $args[0];
@@ -72,6 +86,10 @@ class Content
 		$view->content = $this->content;
 
 		$out = $view->render('content.phtml');
+
+		if($this->formId) {
+			$out = sprintf('<form id="%s" onsubmit="return false;">%s</form>', $this->formId, $out);
+		}
 
 		if($this->response) {
 			return $this->response->setBody($out);

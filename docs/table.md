@@ -39,7 +39,7 @@ public function indexAction()
 
 * 结合 Eloquent ORM 赋值
 
-只需要更改 ->body(...) 中的内容即可，示例如下
+-- 只需要更改 ->body(...) 中的内容即可，示例如下
 
 ```
 UserModel::grid(function($grid) {
@@ -47,5 +47,21 @@ UserModel::grid(function($grid) {
 		->id('编号')
 		->name('姓名')
 		->age('年龄');
+});
+```
+
+-- 如果对数据需要进行条件筛选，则需要调用 model 方法，并设置回调函数即可
+
+```
+UserModel::grid(function($grid) {			
+	$grid->title('....')
+		->id('编号')
+		->name('姓名')
+		->age('年龄')
+		->operation('操作')
+		->model(function($model) {
+			return $model->orderBy('id', 'desc');
+		});
+
 });
 ```

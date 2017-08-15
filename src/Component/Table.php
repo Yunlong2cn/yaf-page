@@ -6,6 +6,10 @@ use Closure;
 use Yaf\View_Interface ;
 use Yaf\View\Simple;
 
+
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Database\Eloquent\Collection;
+
 class Table implements IComponent
 {
 	private $view;
@@ -16,6 +20,10 @@ class Table implements IComponent
 	 * 表头
 	 **/
 	private $headers = [];
+
+
+	// EloquentModel 数据模型
+	private $model;
 	
 
 	/**
@@ -29,7 +37,9 @@ class Table implements IComponent
 
 		$this->view->notfound = '暂无数据...';
 
-		$model && $this->data($model->data());
+		// $model && $this->data($model->data());
+
+		$this->model = $model;
 
 		$callback instanceof Closure && call_user_func($callback, $this);
 	}
@@ -67,6 +77,13 @@ class Table implements IComponent
 		return $this;
 	}
 
+	public function model(Closure $callback = null)
+	{
+		$this->model = call_user_func($callback, $this->model);
+
+		return $this;
+	}
+
 	public function __call($method, $arguments)
 	{
 		$this->headers[$method] = $arguments[0];
@@ -78,6 +95,11 @@ class Table implements IComponent
 	{
 		$this->view->data = $this->data;
 		$this->view->columnNumber = count($header);
+
+		// 处理带模式时的数据
+		if($this->model) {
+			$this->data = $this->model instanceof Collection ?: $this->model->get();
+		}
 
 
 		$this->view->assign([

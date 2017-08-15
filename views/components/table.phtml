@@ -2,14 +2,16 @@
 	<?php if($title):?>
 		<div class="box-header">
 			<h3 class="box-title"><?php echo $title?></h3>
+			<div class="box-tools">ss</div>
 		</div>
 	<?php endif;?>
 	<!-- /.box-header -->
 	<div class="box-body">
-		<table id="example2" class="table table-bordered table-hover">
+		<table class="table table-bordered table-hover">
 			<?php if($headers):?>
 				<thead>
 					<tr>
+						<th width="50" class="text-center"><input type="checkbox" onclick="toggleSelect(this)"/></th>
 						<?php foreach($headers as $header):?>
 							<th><?php echo $header;?></th>
 						<?php endforeach;?>
@@ -20,6 +22,7 @@
 				<?php if($data):?>
 					<?php foreach($data as $key => $val):?>
 						<tr>
+							<td class="text-center"><input type="checkbox" class="check" name="__list_check__"/></td>
 							<?php foreach($headers as $k => $header):?>
 								<td><?php echo $val[$k]?></td>
 							<?php endforeach;?>
@@ -27,7 +30,7 @@
 					<?php endforeach;?>
 				<?php else:?>
 					<tr>
-					<td colspan="<?php echo $columnNumber?>"><?php echo $notfound?></td>
+						<td colspan="<?php echo $columnNumber?>"><?php echo $notfound?></td>
 					</tr>
 				<?php endif;?>
 			</tbody>
@@ -43,6 +46,43 @@
 				</tfoot>
 			<?php endif;?>
 		</table>
+		
+		<?php if(!is_array($data) && $data->count()):?>
+			<div class="row">
+				<div class="col-sm-5" style="padding-top: 28px;">共<?php echo $data->currentPage(), '/', $data->count()?>页，<?php echo $data->total();?> 条记录</div>
+				<div class="col-sm-7 text-right">
+					<ul class="pagination pagination-sm pull-right">
+						<?php if($data->currentPage() <= 1): ?>
+							<li class="disabled"><a href="javascript:void(0);">&laquo;</a></li>
+						<?php else:?>
+							<li><a href="<?php echo $data->previousPageUrl();?>">&laquo;</a></li>
+						<?php endif;?>
+
+						<?php foreach([1, 2, 3, 4, 5, 6, 7, 8, '...', 9, 10] as $number):?>
+							<?php if(is_string($number)):?>
+								<li><a href="javascript:void(0);"><?php echo $number?></a></li>
+							<?php else:?>
+								<li><a href="<?php echo $data->url($number);?>"><?php echo $number?></a></li>
+							<?php endif;?>
+						<?php endforeach;?>
+
+						<?php if($data->currentPage() >= $data->lastPage()): ?>
+							<li class="disabled"><a href="javascript:void(0);">&raquo;</a></li>
+						<?php else:?>
+							<li><a href="<?php echo $data->nextPageUrl();?>">&raquo;</a></li>
+						<?php endif;?>
+					</ul>
+				</div>
+			</div>
+		<?php endif;?>
+
 	</div>
 	<!-- /.box-body -->
 </div>
+
+
+<script type="text/javascript">
+	var toggleSelect = function toggleSelect(obj) {
+		$('.check').attr('checked', $(obj).is(':checked'));
+	}
+</script>

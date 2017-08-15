@@ -23,11 +23,13 @@ class Table implements IComponent
 	 **/
 	private $fields = [];
 
-	public function __construct(Closure $callback = null, View_Interface $view = null)
+	public function __construct(Closure $callback = null, $model = null)
 	{
-		$this->view = $view ?: new Simple(__DIR__ . '/../../views');
+		$this->view = new Simple(__DIR__ . '/../../views');
 
 		$this->view->notfound = '暂无数据...';
+
+		$model && $this->data($model->data());
 
 		$callback instanceof Closure && call_user_func($callback, $this);
 	}

@@ -66,6 +66,13 @@ class Content
 		return $this;
 	}
 
+	public function body($content = null)
+	{
+		$this->content = $content;
+
+		return $this;
+	}
+
 	public function __call($method, $args)
 	{
 		$this->vars[$method] = $args[0];

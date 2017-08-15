@@ -8,8 +8,10 @@
             "email": "384345134@qq.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {},
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/database": "^5.4"
+    },
     "autoload": {
         "psr-4": {
             "Leray\\Yaf\\": "src/"

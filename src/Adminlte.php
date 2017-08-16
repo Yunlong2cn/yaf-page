@@ -7,7 +7,7 @@ use Leray\Yaf\Page\Layout\Content;
 
 class Adminlte
 {
-	public function content(Closure $callback = null, \Yaf\Response\Http $response = null)
+	public function content(Closure $callback = null, $response = null)
 	{
 		$output = new Content($callback);
 
